@@ -1,10 +1,11 @@
 -- SQL script that creates a stored procedure AddBonus that adds
 -- a new correction for a student
+
 DELIMITER //
-CREATE PROCEDURE IF NOT EXISTS AddBonus(
-        IN user_id INT,
+CREATE PROCEDURE AddBonus(
+        IN user_id INTEGER,
         IN project_name VARCHAR(255),
-        IN score INT
+        IN score INTEGER
 )
 BEGIN
     INSERT INTO projects (name)
