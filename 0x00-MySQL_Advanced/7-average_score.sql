@@ -2,7 +2,7 @@
 -- computes and store the average score for a student.
 DELIMITER //
 CREATE PROCEDURE ComputeAverageScoreForUser(IN usr_id INT)
-BEIGN
+BEGIN
         SET @avrg = (SELECT AVG(score) AS avrg FROM corrections WHERE user_id = usr_id);
         UPDATE users SET average_score = @avrg WHERE id = usr_id;
 END //
