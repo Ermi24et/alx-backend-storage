@@ -18,11 +18,11 @@ if __name__ == "__main__":
     print(nginx_logs.count_documents({"method": "GET", "path": "/status"}),
           "status check")
     print('Ips:')
-    agg = [
+    pipe = [
             {'$group': {'_id': '$ip', 'count': {'$sum': 1}}},
             {'$sort': {'count': -1}},
             {'$limit': 10}
     ]
-    sortedIp = list(nginx_logs.aggregate(agg))
+    sortedIp = list(nginx_logs.aggregate(pipe))
     for ip in sortedIp:
         print('\t{}: {}'.format(ip['_id'], ip['count']))
