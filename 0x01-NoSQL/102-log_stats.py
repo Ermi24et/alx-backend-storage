@@ -17,7 +17,7 @@ if __name__ == "__main__":
     print("\tmethod DELETE:", nginx_logs.count_documents({"method": "DELETE"}))
     print(nginx_logs.count_documents({"method": "GET", "path": "/status"}),
           "status check")
-    print('Ips:')
+    print('IPs:')
     pipe = [
             {'$group': {'_id': '$ip', 'count': {'$sum': 1}}},
             {'$sort': {'count': -1}},
