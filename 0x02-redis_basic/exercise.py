@@ -13,14 +13,14 @@ def replay(method: Callable):
     replay function to display the history of calls
     """
     key = method.__qualname__
-    i = "".join([key, ":inputs"])
-    o = "".join([key, ":outputs"])
+    ip = "".join([key, ":inputs"])
+    op = "".join([key, ":outputs"])
     count = method.__self__.get(key)
-    ip_list = method.__self__._redis.lrange(i, 0, -1)
-    op_list = method.__self__._redis.lrange(o, 0, -1)
-    queue = list(zip(ip_list, op_list))
-    print(f"(key) was called {decode_(count)} times:")
-    for ke, val, in queue:
+    ip_list = method.__self__._redis.lrange(ip, 0, -1)
+    op_list = method.__self__._redis.lrange(op, 0, -1)
+    qu = list(zip(ip_list, op_list))
+    print(f"{key} was called {decode_(count)} times:")
+    for ke, val, in qu:
         ke = decode_(ke)
         val = decode_(val)
         print(f"{key}(*{ke}) -> {val}")
