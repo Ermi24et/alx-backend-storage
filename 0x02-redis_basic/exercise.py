@@ -7,6 +7,11 @@ import uuid
 from typing import Union, Callable
 
 
+def count_calls(method: Callable) -> Callable:
+    """
+    decorator that takes a single method and returns callable
+    """
+    key = method.__qualname__
 class Cache:
     """
     cache class
