@@ -40,8 +40,9 @@ def count_calls(method: Callable) -> Callable:
         """
         self._redis.incr(key)
         return method(self, *args, **kwargs)
-    
+
     return wrapper
+
 
 def call_history(method: Callable) -> Callable:
     """
@@ -60,7 +61,7 @@ def call_history(method: Callable) -> Callable:
         output_data = method(self, *args)
         self._redis.rpush(output_key, output_data)
         return output_data
-    
+
     return wrapper
 
 
@@ -68,7 +69,8 @@ def decode_(b: bytes) -> str:
     """
     decoding to utf8
     """
-    return b.decode('utf-8') if type(b) == bytes else b
+    return b.decode('utf-8') if b is isinstance(bytes) else b
+
 
 class Cache:
     """
@@ -87,19 +89,19 @@ class Cache:
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
-    
+
     def get(self, key: str,
             fn: Callable = None) -> Union[str, bytes, int, float]:
         if fn:
             return fn(self._redis.get(key))
         return self._redis.get(key)
-    
+
     def get_str(self, key: str) -> str:
         """
         parametrize cache.get with the correct conversion function
         """
         return str(self._redis.get(key))
-    
+
     def get_int(self, key: str) -> int:
         """
         parametrize cache.get with the correct conversion function
