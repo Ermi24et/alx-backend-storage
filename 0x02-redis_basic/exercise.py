@@ -8,6 +8,24 @@ from typing import Union, Callable, Any
 from functools import wraps
 
 
+def replay(method: Callable):
+    """
+    replay function to display the history of calls
+    """
+    key = method.__qualname__
+    i = "".join([key, ":inputs"])
+    o = "".join([key, ":outputs"])
+    count = method.__self__.get(key)
+    ip_list = method.__self__._redis.lrange(i, 0, -1)
+    op_list = method.__self__._redis.lrange(o, 0, -1)
+    queue = list(zip(ip_list, op_list))
+    print(f"(key) was called {decode_(count)} times:")
+    for ke, val, in queue:
+        ke = decode_(ke)
+        val = decode_(val)
+        print(f"{key}(*{ke}) -> {val}")
+
+
 def count_calls(method: Callable) -> Callable:
     """
     decorator that takes a single method and returns callable
@@ -43,6 +61,13 @@ def call_history(method: Callable) -> Callable:
         return output_data
     
     return wrapper
+
+
+def decode_(b: bytes) -> str:
+    """
+    decoding to utf8
+    """
+    return b.decode('utf-8') if type(b) == bytes else b
 
 class Cache:
     """
