@@ -69,7 +69,7 @@ def decode_(b: bytes) -> str:
     """
     decoding to utf8
     """
-    return b.decode('utf-8') if b is isinstance(bytes) else b
+    return b.decode('utf-8') if isinstance(b, bytes) else b
 
 
 class Cache:
