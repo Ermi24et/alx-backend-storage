@@ -8,16 +8,17 @@ from typing import Union, Callable, Any
 from functools import wraps
 
 
-def replay(method: Callable):
+def replay(method: Callable) -> None:
     """
     replay function to display the history of calls
     """
+    r = redis.Redis()
     key = method.__qualname__
     ip = "".join([key, ":inputs"])
     op = "".join([key, ":outputs"])
     count = method.__self__.get(key)
-    ip_list = method.__self__._redis.lrange(ip, 0, -1)
-    op_list = method.__self__._redis.lrange(op, 0, -1)
+    ip_list = r.lrange(ip, 0, -1)
+    op_list = r.lrange(op, 0, -1)
     qu = list(zip(ip_list, op_list))
     print(f"{key} was called {decode_(count)} times:")
     for ke, val, in qu:
