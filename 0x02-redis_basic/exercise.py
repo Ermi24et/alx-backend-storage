@@ -4,7 +4,7 @@ writing strings to redis
 """
 import redis
 import uuid
-from typing import Union, Callable
+from typing import Union, Callable, Any
 
 
 def count_calls(method: Callable) -> Callable:
@@ -12,6 +12,17 @@ def count_calls(method: Callable) -> Callable:
     decorator that takes a single method and returns callable
     """
     key = method.__qualname__
+
+    @wraps(method)
+    def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
+        """
+        wrapper function that increments a key
+        """
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+    
+    return wrapper
+
 class Cache:
     """
     cache class
