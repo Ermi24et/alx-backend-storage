@@ -92,6 +92,9 @@ class Cache:
 
     def get(self, key: str,
             fn: Callable = None) -> Union[str, bytes, int, float]:
+        """
+        get method to return key
+        """
         if fn:
             return fn(self._redis.get(key))
         return self._redis.get(key)
