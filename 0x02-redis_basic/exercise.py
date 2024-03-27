@@ -5,6 +5,7 @@ writing strings to redis
 import redis
 import uuid
 from typing import Union, Callable, Any
+from functools import wraps
 
 
 def count_calls(method: Callable) -> Callable:
