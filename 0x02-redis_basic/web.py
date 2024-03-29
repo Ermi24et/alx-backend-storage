@@ -13,10 +13,10 @@ def get_page(url: str) -> str:
     uses requests module to obtain the HTML content of a particular
     URL and returns it
     """
-    res = requests.get(url).text
-    if not store.get(f"count:{url}"):
-        store.set(f"count:{url}", 1)
-        store.setex(f"res:{url}", 10, res)
+    result = requests.get(url).text
+    if not store.get("count:{}".format(url)):
+        store.set("count:{}".format(url), 1)
+        store.setex("result:{}".format(url), 10, result)
     else:
-        store.incr(f"count:{url}", 1)
-    return res
+        store.incr("count:{}".format(url), 1)
+    return result
