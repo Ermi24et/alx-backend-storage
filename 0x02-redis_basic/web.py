@@ -2,10 +2,11 @@
 """
 Implementing an expiring web cache and tracker
 """
+
 import requests
 import redis
 
-store = redis.Redis()
+client = redis.Redis()
 
 
 def get_page(url: str) -> str:
@@ -14,9 +15,9 @@ def get_page(url: str) -> str:
     URL and returns it
     """
     result = requests.get(url).text
-    if not store.get("count:{}".format(url)):
-        store.set("count:{}".format(url), 1)
-        store.setex("result:{}".format(url), 10, result)
+    if not client.get("count:{}".format(url)):
+        client.set("count:{}".format(url), 1)
+        client.setex("result:{}".format(url), 10, result)
     else:
-        store.incr("count:{}".format(url), 1)
+        client.incr("count:{}".format(url), 1)
     return result
